@@ -1,26 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './components/Login';
+import SignUp from './components/SignUp';
+import Dashboard from './components/Dashboard';
+import useStore from './store';
+import { MaterialUIControllerProvider } from './context'; // Adjust the import path as necessary
 
-function App() {
+const App: React.FC = () => {
+  const user = useStore(state => state.user);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MaterialUIControllerProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/dashboard" element={user ? <Dashboard /> : <Login />} />
+          <Route path="/" element={user ? <Dashboard /> : <Login />} />
+        </Routes>
+      </Router>
+    </MaterialUIControllerProvider>
   );
-}
+};
 
 export default App;
